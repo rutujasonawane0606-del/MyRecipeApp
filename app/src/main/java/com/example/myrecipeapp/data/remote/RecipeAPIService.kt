@@ -17,7 +17,7 @@ class RecipeAPIService(private val client: HttpClient) {
         return client.get(urlString = "${ktorClient.BASE_URL}recipes").body()
     }
 
-    suspend fun getALlRecipesByIS(id: Int) : RecipeDTO {
+    suspend fun getALlRecipesById(id: Int) : RecipeDTO {
         return client.get(urlString = "${ktorClient.BASE_URL}recipes/$id").body()
     }
 
