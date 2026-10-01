@@ -11,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.myrecipeapp.presentation.screen.home.HomeScreen
 import com.example.myrecipeapp.ui.theme.MyRecipeAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,6 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyRecipeAppTheme {
+
             }
         }
     }
