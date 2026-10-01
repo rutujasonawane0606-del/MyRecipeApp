@@ -17,7 +17,8 @@ class HomeViewModel : ViewModel() {
     private val repository: RecipeRepository = RecipeRepositoryImpl(
         apiService = RecipeAPIService(
             ktorClient.client
-        ))
+        )
+    )
 
     // state mangment
 
@@ -30,18 +31,47 @@ class HomeViewModel : ViewModel() {
     var recipes by mutableStateOf<List<RecipeDTO>>(emptyList())
         private set
 
+    var categories by mutableStateOf<List<String>>(listOf("All"))
+        private set
 
     var selectedCategory by mutableStateOf("All")
         private set
 
     private var allRecipes: List<RecipeDTO> = emptyList()
 
-    fun fetchRecipes(){
+    fun fetchRecipes() {
 
         isLoading = true
         errorMessage = null
 
-        viewModelScope.launch {  }
+        viewModelScope.launch {
 
+           try{
+               val result = repository.getAllRecipes()
+               allRecipes = result
+
+               val cuisines = result.map { it.cuisine }.distinct().sorted()
+               categories = listOf("All") + cuisines
+
+               applyFilters()
+           }
+           catch (e : Exception){
+               errorMessage = e.message ?: "An unexpected error occurr"
+           }finally {
+               isLoading = false
+           }
+        }
+
+    }
+
+    fun OnCategorySeleted(category : String){
+        selectedCategory = category
+        applyFilters()
+
+    }
+    private fun applyFilters() {
+        recipes = if (selectedCategory == "All")
+            allRecipes
+        else allRecipes.filter { it.cuisine == selectedCategory }
     }
 }
