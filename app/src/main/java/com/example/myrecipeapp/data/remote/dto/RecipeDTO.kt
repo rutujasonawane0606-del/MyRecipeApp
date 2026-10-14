@@ -1,5 +1,8 @@
 package com.example.myrecipeapp.data.remote.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class RecipeDTO(
     val caloriesPerServing: Int,
     val cookTimeMinutes: Int,
