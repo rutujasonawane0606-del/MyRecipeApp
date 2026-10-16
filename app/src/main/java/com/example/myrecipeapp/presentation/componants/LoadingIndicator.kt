@@ -1,4 +1,4 @@
-package com.example.myrecipeapp.presentation.screen.home
+package com.example.myrecipeapp.presentation.componants
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import com.example.myrecipeapp.ui.theme.MyOrange
 
 @Preview(
@@ -14,7 +15,7 @@ import com.example.myrecipeapp.ui.theme.MyOrange
     showBackground = true
 )
 @Composable
-fun LoadingIndicator() {
+fun LoadingIndicator(strokeWidth: Dp) {
 
     Box(
         modifier = Modifier.fillMaxSize(),

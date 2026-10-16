@@ -39,6 +39,9 @@ class HomeViewModel : ViewModel() {
 
     private var allRecipes: List<RecipeDTO> = emptyList()
 
+    init {
+        fetchRecipes()
+    }
     fun fetchRecipes() {
 
         isLoading = true

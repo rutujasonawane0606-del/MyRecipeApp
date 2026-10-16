@@ -1,5 +1,6 @@
 package com.example.myrecipeapp.presentation.screen.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,6 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,12 +25,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.myrecipeapp.presentation.componants.LoadingIndicator
 import com.example.myrecipeapp.presentation.viewmodels.HomeViewModel
 import com.example.myrecipeapp.ui.theme.MyOrange
 
@@ -54,11 +57,12 @@ fun HomeScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = MyOrange.copy(alpha = 0.10f))
                 .padding(innerPadding)
         )
         {
             when {
-                viewModel.isLoading -> LoadingIndicator()
+                viewModel.isLoading -> LoadingIndicator(strokeWidth = 2.dp)
                 viewModel.errorMessage != null -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -84,24 +88,70 @@ fun HomeScreen(
                                 containerColor = MyOrange
                             )
                         ) {
-                            Text(" Retry",
+                            Text(
+                                " Retry",
                                 fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold)
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     }
                 }
 
-                else ->{
+                else -> {
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
                         contentPadding = PaddingValues(16.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
 
-                    ) {
+                        ) {
 
-                        item(span = { GridItemSpan(currentLineSpan = maxLineSpan)}){
+                        item(span = { GridItemSpan(currentLineSpan = maxLineSpan) }) {
                             HomeHeader()
+                        }
+
+                        if (viewModel.categories.size > 1) {
+                            item(span = { GridItemSpan(currentLineSpan = maxLineSpan) }) {
+                                CategorySection(
+                                    categories = viewModel.categories,
+                                    selected = viewModel.selectedCategory,
+                                    onSelected = viewModel::OnCategorySeleted
+                                )
+                            }
+                        }
+
+                        item(span = { GridItemSpan(currentLineSpan = maxLineSpan) }) {
+                            SectionHeader(
+                                title = if (viewModel.selectedCategory == "All") "All Recipes" else viewModel.selectedCategory,
+                                icon = Icons.Default.Menu
+                            )
+                        }
+
+                        if (viewModel.recipes.isEmpty()) {
+                            item(span = { GridItemSpan(currentLineSpan = maxLineSpan) }) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 48.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+
+                                    Text(
+                                        text = "No recipes found",
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MyOrange
+                                    )
+                                }
+                            }
+                        } else {
+                            items(viewModel.recipes, key = { it.id }) { recipe ->
+                                RecipeCard(
+                                    recipe = recipe,
+                                    onClick = { onRecipeClick(recipe.id) }
+                                )
+
+                            }
                         }
                     }
                 }
