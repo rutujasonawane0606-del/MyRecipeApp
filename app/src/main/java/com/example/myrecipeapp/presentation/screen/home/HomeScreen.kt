@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.myrecipeapp.presentation.componants.ErrorMessage
 import com.example.myrecipeapp.presentation.componants.LoadingIndicator
 import com.example.myrecipeapp.presentation.viewmodels.HomeViewModel
 import com.example.myrecipeapp.ui.theme.MyOrange
@@ -63,41 +64,10 @@ fun HomeScreen(
         {
             when {
                 viewModel.isLoading -> LoadingIndicator(strokeWidth = 2.dp)
-                viewModel.errorMessage != null -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-
-                        Text(
-                            text = viewModel.errorMessage ?: "",
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MyOrange
-                        )
-
-                        Spacer(modifier = Modifier.height(24.dp))
-
-                        Button(
-                            onClick = { viewModel.fetchRecipes() },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 24.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                contentColor = Color.White,
-                                containerColor = MyOrange
-                            )
-                        ) {
-                            Text(
-                                " Retry",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }
-
-                else -> {
+                viewModel.errorMessage != null -> ErrorMessage(
+                    errorMessage = viewModel.errorMessage,
+                    onRetry = { viewModel.fetchRecipes() } )
+                    else -> {
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
                         contentPadding = PaddingValues(16.dp),
