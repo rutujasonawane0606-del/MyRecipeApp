@@ -43,14 +43,21 @@ fun RecipeDetailsScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .background(color = MyOrange.copy(alpha = 0.02f))
-        ){
-            when{
+        ) {
+            when {
                 viewModel.isLoading -> LoadingIndicator(strokeWidth = 1.dp)
 
                 viewModel.errorMessage != null -> ErrorMessage(
                     errorMessage = viewModel.errorMessage,
-                    onRetry = { viewModel.fetchRecipeDetail(recipeID)}
+                    onRetry = { viewModel.fetchRecipeDetail(recipeID) }
                 )
+
+                viewModel.recipe != null -> {
+                    // recipe Details
+                    RecipeDetailsContent  (details = viewModel.recipe!! )
+
+                }
+
             }
         }
     }
